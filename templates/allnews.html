@@ -1,0 +1,24 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
+{% block title %}All news!{% endblock title %}
+{% block content %}
+<h1> Main news! </h1>
+<hr>
+<h3>Number of news is {{allnews|length}}</h3>
+<hr>
+<table>
+    <tr>
+        <td>Title</td>
+        <td>Published</td>
+        <td>Content</td>
+    </tr>
+    {% for i in allnews %}
+        <tr>
+        <td>{{i.title|censor}}</td>
+        <td>{{i.post_creation_date}}</td>
+        <td>{{i.post_content|censor|truncatechars:21}}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock content %}
