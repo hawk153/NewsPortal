@@ -22,7 +22,8 @@
     </tr>
     {% for i in selectednews %}
         <tr>
-        <td>{{i.title|censor}}</td>
+        <td><a class="nav-link" href="/news/{{i.id}}">{{i.title|censor}}
+                        </a></td>
         <td>{{i.post_creation_date}}</td>
         <td>{{i.post_content|censor|truncatechars:21}}</td>
         </tr>

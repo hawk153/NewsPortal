@@ -3,22 +3,44 @@
 
 {% block title %}All news!{% endblock title %}
 {% block content %}
-<h1> Main news! </h1>
+<h1> Главные новости! </h1>
 <hr>
-<h3>Number of news is {{allnews|length}}</h3>
+<h3>Количество новостей :{{allnews|length}}</h3>
 <hr>
 <table>
     <tr>
-        <td>Title</td>
-        <td>Published</td>
-        <td>Content</td>
+        <td><h5>Заголовок</h5></td>
+        <td><h5>Опубликовано</h5></td>
+        <td><h5>Содержимое</h5></td>
     </tr>
     {% for i in allnews %}
         <tr>
-        <td>{{i.title|censor}}</td>
+        <td><a class="nav-link" href="/news/{{i.id}}">{{i.title|censor}}
+                        </a></td>
         <td>{{i.post_creation_date}}</td>
         <td>{{i.post_content|censor|truncatechars:21}}</td>
         </tr>
     {% endfor %}
 </table>
+<!--Pagination-->
+<div class="text-center mt-5">
+{% if page_obj.has_previous %}
+   <a href="?page=1"> 1 </a>
+   {% if page_obj.previous_page_number != 1 %}
+       ...
+       <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+    {% endif %}
+{% endif %}
+
+{{ page_obj.number }}
+
+{% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+    {% if paginator.num_pages != page_obj.next_page_number %}
+    ...
+    <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+    {% endif %}
+{% endif %}
+</div>
+
 {% endblock content %}
