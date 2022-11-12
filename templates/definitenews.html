@@ -1,4 +1,3 @@
-
 {% extends 'flatpages/default.html' %}
 {% load custom_filters %}
 
@@ -6,6 +5,14 @@
 {% block navbar %}<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="/news/">Home</a>
+                {% if not user.username %}
+                <a class="navbar-brand" href="/accounts/signup/">Регистрация</a>
+                {% endif %}
+                {% if not user.username %}
+                <a class="navbar-brand" href="/accounts/login/">| Вход</a>
+                {% else %}
+                <a class="navbar-brand" href="/accounts/logout/">| Выход</a>
+                {% endif %}
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -31,7 +38,6 @@
 
 {% endblock navbar %}
 {% block content %}
-
 <p><h4>Новость № <span>{{definitenews.pk}}</span></h4></p>
 <p><h5>{{definitenews.post_creation_date|date:'jS. F. Y.'}}</h5></p>
 <p><h4>{{definitenews.title|censor}}</h4></p>

@@ -2,7 +2,6 @@
 {% load custom_filters %}
 {% load custom_tags %}
 
-
 {% block title %}All news!{% endblock title %}
 {% block content %}
 <h1> Поиск новостей и статей... </h1>
@@ -19,13 +18,19 @@
         <td><h5>Заголовок</h5></td>
         <td><h5>Опубликовано</h5></td>
         <td><h5>Содержимое</h5></td>
+        <td><h5>Категория</h5></td>
     </tr>
     {% for i in selectednews %}
         <tr>
-        <td><a class="nav-link" href="/news/{{i.id}}">{{i.title|censor}}
-                        </a></td>
+        <td><a class="nav-link" href="/news/{{i.id}}">{{i.title|censor}}</a></td>
         <td>{{i.post_creation_date}}</td>
         <td>{{i.post_content|censor|truncatechars:21}}</td>
+        <td>{% for c in i.post_category.all %}
+        <span>
+        <a href="{% url 'category' c.id%}"> {{c}}</a>
+        </span>
+        {% endfor %}
+         </td>
         </tr>
     {% endfor %}
 </table>

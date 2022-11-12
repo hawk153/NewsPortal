@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>announcement...</title>
 </head>
 <body>
-$END$
+<h3>«Здравствуй, {{name}}. Новая статья в твоём любимом разделе!».</h3>
+<p><a href="{% url 'definitenews' news_id %}">Ссылка на статью</a></p>
+<p>{{news_preview}}</p>
 </body>
 </html>

@@ -12,13 +12,17 @@
         <td><h5>Заголовок</h5></td>
         <td><h5>Опубликовано</h5></td>
         <td><h5>Содержимое</h5></td>
+        <td><h5>Категория</h5></td>
     </tr>
     {% for i in allnews %}
         <tr>
-        <td><a class="nav-link" href="/news/{{i.id}}">{{i.title|censor}}
-                        </a></td>
+        <td><a class="nav-link" href="/news/{{i.id}}">{{i.title|censor}}</a></td>
         <td>{{i.post_creation_date}}</td>
         <td>{{i.post_content|censor|truncatechars:21}}</td>
+        <td>{% for c in i.post_category.all %}
+            <a href="{% url 'category' c.id%}"> {{c}} </a>
+            {% endfor %}
+        </td>
         </tr>
     {% endfor %}
 </table>
@@ -29,11 +33,9 @@
    {% if page_obj.previous_page_number != 1 %}
        ...
        <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
-    {% endif %}
+   {% endif %}
 {% endif %}
-
 {{ page_obj.number }}
-
 {% if page_obj.has_next %}
     <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
     {% if paginator.num_pages != page_obj.next_page_number %}

@@ -10,6 +10,9 @@ class PostCategory(models.Model):
     posts = models.ForeignKey('Post', on_delete=models.CASCADE)
     categories = models.ForeignKey('Category', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.categories} ---> {self.posts}'
+
 
 class Author(models.Model):
     author = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -32,6 +35,11 @@ class Author(models.Model):
 
 class Category(models.Model):
     category = models.CharField(max_length=32, unique=True)
+    subscribers = models.ManyToManyField(User, verbose_name='Подписчики', related_name='cats')
+
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
     def __str__(self):
         return f'{self.category}'

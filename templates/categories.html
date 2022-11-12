@@ -1,10 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
+{% block title %}Categories{% endblock title %}
+{% block content %}
+<h3> Категория: {{cat}}</h3>
+{% if not is_subscriber and user.username %}
+<p><a href="{% url 'subscribing' cat.id %}" class="btn btn-primary">Подписаться</a></p>
+{% elif is_subscriber %}
+<p><a href="{% url 'unsubscribing' cat.id %}" class="btn btn-primary">Отписаться</a></p>
+{% endif %}
+
+<table>
+    <tr class="text-center">
+        <td><h5>Заголовок</h5></td>
+        <td><p><h5>Опубликовано</h5></td>
+        <td><h5>Содержимое</h5></td>
+    </tr>
+
+    {% for i in categorylist %}
+        <tr>
+        <td><p>{{i.title|censor}}</p></td>
+        <td><p>{{i.post_creation_date}}</p></td>
+        <td><p>{{i.post_content|censor|truncatechars:21}}</p></td>
+        </tr>
+    {% endfor %}
+</table>
+
+<!--Pagination-->
+<div class="text-center mt-5">
+{% if page_obj.has_previous %}
+   <a href="?page=1"> 1 </a>
+   {% if page_obj.previous_page_number != 1 %}
+       ...
+       <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+    {% endif %}
+{% endif %}
+{{ page_obj.number }}
+{% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+    {% if paginator.num_pages != page_obj.next_page_number %}
+    ...
+    <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+    {% endif %}
+{% endif %}
+</div>
+
+{% endblock content %}

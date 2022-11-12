@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Confirmation...</title>
 </head>
 <body>
-$END$
+
+{% load account %}
+    <h1>Спасибо за регистрацию {{ user.username }}!</h1>
+    <h3>Следуйте по ссылке<a href="{{ activate_url }}">Подтверждение</a>чтобы активировать свой аккаунт</h3>
 </body>
 </html>
