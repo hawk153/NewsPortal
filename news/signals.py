@@ -8,7 +8,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 from .models import Post, PostCategory, Author, Category
-from project.project.settings import SITE_URL
+from project.settings import SITE_URL
 
 
 def announce(preview, pk, title, subscriber):
@@ -23,7 +23,7 @@ def announce(preview, pk, title, subscriber):
                                      to=[i])
         msg.attach_alternative(html_content, 'text/html')
 
-        # msg.send()
+        msg.send()
 
 
 @receiver(m2m_changed, sender=PostCategory)

@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 
-from project.project.settings import SITE_URL
+from project.settings import SITE_URL
 from project.news.models import Category, Post
 
 logger = logging.getLogger(__name__)
