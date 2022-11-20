@@ -9,12 +9,14 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from .filters import FilterNews
 from .forms import CreateForm
 from .models import Post, Author, Category
+from .tasks import announce
 
 
 class NewsList(ListView):
@@ -56,6 +58,8 @@ class CreateNews(PermissionRequiredMixin, CreateView):
     permission_required = ('news.add_post',)
     raise_exception = True
 
+    # success_url = reverse_lazy('news-created')
+
     def form_valid(self, form):
         print(form)
         time_now = datetime.now()
@@ -66,6 +70,29 @@ class CreateNews(PermissionRequiredMixin, CreateView):
             return super().form_valid(form)
         else:
             return HttpResponse(f'Доступный максимум 3статьи за сутки.Вы разместили {len(post_list)}')
+
+    def post(self, request, *args, **kwargs):
+        print(request.user)
+        p = Post(title=request.POST['title'],
+                 post_content=request.POST['post_content'],
+                 post_type=request.POST['post_type'],
+                 author_name=Author.objects.get(id=request.POST['author_name']),
+                 )
+        p.save()
+        subscribers_list = []
+        email_list = set()
+        selected_categories = request.POST.getlist('post_category')
+        for i in selected_categories:
+            p.post_category.add(i)
+            subscribers_list.append(User.objects.filter(cats=i))
+
+        for user_obj in subscribers_list:
+            for i in user_obj:
+                email_list.add(i.email)
+        email_list = list(email_list)
+
+        announce.delay(p.pk, email_list)
+        return redirect('allnews')
 
     # Реализация рассылки без использования сигналов.
     # def post(self, request, *args, **kwargs):
@@ -143,7 +170,6 @@ def subscribe_user(request, pk):
     message = f'Вы успешно подписались на новости {category} категории'
     context = {'message': message, 'category': category}
     return render(request, 'subscribe.html', context)
-
 
 @login_required
 def unsubscribe_user(request, pk):

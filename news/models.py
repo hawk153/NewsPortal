@@ -18,6 +18,10 @@ class Author(models.Model):
     author = models.OneToOneField(User, on_delete=models.CASCADE)
     author_rating = models.IntegerField(default=0)
 
+    class Meta:
+        verbose_name = 'Автор'
+        verbose_name_plural = 'Авторы'
+
     def update_rating(self):
         c_rate = 0
         p_rate = 0
@@ -59,6 +63,10 @@ class Post(models.Model):
     rating = models.IntegerField(default=0)
     post_category = models.ManyToManyField(Category, through='PostCategory', verbose_name='Категория')
 
+    class Meta:
+        verbose_name = 'Статья'
+        verbose_name_plural = 'Статьи'
+
     def like(self):
         self.rating += 1
         self.save()
@@ -83,6 +91,10 @@ class Comment(models.Model):
     comment_content = models.TextField()
     comment_creation_date = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
 
     def like(self):
         self.rating += 1
